@@ -20,7 +20,7 @@ def jira_link(domain, jiraid):
 def jira_url(match, bot=None):
     settings = bot.config.get('jira_settings', {})
     if jira_projects == None:
-      jiraprojects = set(map(lambda p: p['key'], jira_api(settings, '/rest/api/2.0.alpha1/project')));
+      jiraprojects = set(map(lambda p: p['key'], jira_api(settings, '/rest/api/latest/project')));
 
     jiraid = match.group(0)
     if not jiraid.split("-")[0] in jiraprojects:
@@ -34,10 +34,10 @@ def jira_url(match, bot=None):
     if "errorMessages" in issue:
       return ", ".join(issue["errorMessages"])
 
-    return "<a href='%s'> %s </a>" % (url, issue["fields"]["summary"]["value"])
+    return "<a href='%s'>%s</a>" % (url, issue["fields"]["summary"])
 
 def jira_issue(settings, issue):
-  return jira_api(settings, "/rest/api/2.0.alpha1/issue/" + issue)
+  return jira_api(settings, "/rest/api/latest/issue/" + issue)
 
 def jira_api(settings, path):
   return json.loads(https_get(settings["domain"], path, settings["username"], settings["password"]))
